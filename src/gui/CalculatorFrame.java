@@ -1,5 +1,7 @@
 package gui;
 
+import calculator.CalcStrategy;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,11 +10,12 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Vector;
 
-public class calculatorFrame extends JFrame implements WindowListener {
+public class CalculatorFrame extends JFrame implements WindowListener {
     private JTextField textField = new JTextField("");
     private Vector<JButton> buttons = new Vector<>();
+    private CalcStrategy calcStrategy = new CalcStrategy();
 
-    public calculatorFrame() {
+    public CalculatorFrame() {
         super("Calculator");
 
         JPanel textPnl = new JPanel();
@@ -21,7 +24,7 @@ public class calculatorFrame extends JFrame implements WindowListener {
         textPnl.add(textField);
         textPnl.setPreferredSize(new Dimension(250, 50));
         add(textPnl, BorderLayout.PAGE_START);
-        JPanel buttonPnl = new JPanel(new GridLayout(4,3));
+        JPanel numberPnl = new JPanel(new GridLayout(4,3));
         for (int i = 0; i < 10; i = i + 1) {
             buttons.add(new JButton(String.valueOf(i)));
             buttons.get(i).setPreferredSize(new Dimension(90, 75));
@@ -34,7 +37,7 @@ public class calculatorFrame extends JFrame implements WindowListener {
                 }
             });
             if (i > 0)
-                buttonPnl.add(buttons.get(i));
+                numberPnl.add(buttons.get(i));
         }
 
         JButton clrBtn = new JButton("Clear");
@@ -45,20 +48,68 @@ public class calculatorFrame extends JFrame implements WindowListener {
                 textField.setText("");
             }
         });
-        buttonPnl.add(clrBtn);
+        numberPnl.add(clrBtn);
 
-        buttonPnl.add(buttons.get(0));
+        numberPnl.add(buttons.get(0));
 
         JButton eqlBtn = new JButton("=");
         eqlBtn.setPreferredSize(new Dimension(90, 75));
         eqlBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textField.setText("");
+                CalcStrategy temp = new CalcStrategy(textField.getText());
+                textField.setText(String.valueOf(temp.getC()));
             }
         });
-        buttonPnl.add(eqlBtn);
-        add(buttonPnl, BorderLayout.PAGE_END);
+        numberPnl.add(eqlBtn);
+        add(numberPnl, BorderLayout.CENTER);
+
+        JPanel operationPnl = new JPanel(new GridLayout(4,1));
+        JButton addBtn = new JButton("+");
+        addBtn.setPreferredSize(new Dimension(90, 75));
+        addBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String prevText = textField.getText();
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty())
+                    textField.setText(prevText + "+");
+            }
+        });
+        JButton subBtn = new JButton("-");
+        subBtn.setPreferredSize(new Dimension(90, 75));
+        subBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String prevText = textField.getText();
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty())
+                    textField.setText(prevText + "-");
+            }
+        });
+        JButton mulBtn = new JButton("*");
+        mulBtn.setPreferredSize(new Dimension(90, 75));
+        mulBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String prevText = textField.getText();
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty())
+                    textField.setText(prevText + "*");
+            }
+        });
+        JButton divBtn = new JButton("/");
+        divBtn.setPreferredSize(new Dimension(90, 75));
+        divBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String prevText = textField.getText();
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty())
+                    textField.setText(prevText + "/");
+            }
+        });
+        operationPnl.add(addBtn);
+        operationPnl.add(subBtn);
+        operationPnl.add(mulBtn);
+        operationPnl.add(divBtn);
+        add(operationPnl, BorderLayout.WEST);
 
         setVisible(true);
         setSize(new Dimension(300, 500));
@@ -72,7 +123,7 @@ public class calculatorFrame extends JFrame implements WindowListener {
     }
 
     public static void main(String[] args) {
-        new calculatorFrame();
+        new CalculatorFrame();
     }
 
     public void windowActivated(WindowEvent event) {
