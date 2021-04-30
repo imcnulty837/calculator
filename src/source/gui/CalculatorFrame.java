@@ -7,10 +7,7 @@ import source.calculator.CalcStrategy;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.Vector;
 
 public class CalculatorFrame extends JFrame implements WindowListener {
@@ -75,6 +72,7 @@ public class CalculatorFrame extends JFrame implements WindowListener {
         add(numberPnl, BorderLayout.CENTER);
 
         JPanel operationPnl = new JPanel(new GridLayout(4,2));
+        // + button for addition
         JButton addBtn = new JButton("+");
         addBtn.setPreferredSize(new Dimension(90, 75));
         addBtn.addActionListener(new ActionListener() {
@@ -85,6 +83,7 @@ public class CalculatorFrame extends JFrame implements WindowListener {
                     textField.setText(prevText + "+");
             }
         });
+        // - button for subtraction
         JButton subBtn = new JButton("-");
         subBtn.setPreferredSize(new Dimension(90, 75));
         subBtn.addActionListener(new ActionListener() {
@@ -95,6 +94,7 @@ public class CalculatorFrame extends JFrame implements WindowListener {
                     textField.setText(prevText + "-");
             }
         });
+        // * button for multiplication
         JButton mulBtn = new JButton("*");
         mulBtn.setPreferredSize(new Dimension(90, 75));
         mulBtn.addActionListener(new ActionListener() {
@@ -105,6 +105,7 @@ public class CalculatorFrame extends JFrame implements WindowListener {
                     textField.setText(prevText + "*");
             }
         });
+        // / button for division and fractions
         JButton divBtn = new JButton("/");
         divBtn.setPreferredSize(new Dimension(90, 75));
         divBtn.addActionListener(new ActionListener() {
@@ -117,15 +118,17 @@ public class CalculatorFrame extends JFrame implements WindowListener {
                 }
             }
         });
+        // ^ button for exponents
         JButton expBtn = new JButton("^");
         expBtn.setPreferredSize(new Dimension(90, 75));
         expBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String prevText = textField.getText();
-                if (!calcStrategy.check(prevText) && !prevText.isEmpty())
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty()) {
                     textField.setText(prevText + "^");
-                exponentFlag = true;
+                    exponentFlag = true;
+                }
             }
         });
         operationPnl.add(addBtn);
