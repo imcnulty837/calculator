@@ -1,6 +1,9 @@
-package gui;
+/**TODO:
+ *  1. Implement functionality of Power button
+ */
+package source.gui;
 
-import calculator.CalcStrategy;
+import source.calculator.CalcStrategy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +17,7 @@ public class CalculatorFrame extends JFrame implements WindowListener {
     private JTextField textField = new JTextField("");
     private Vector<JButton> buttons = new Vector<>();
     private CalcStrategy calcStrategy = new CalcStrategy();
+    private boolean resultFlag = false, exponentFlag = false;
 
     public CalculatorFrame() {
         super("Calculator");
@@ -32,8 +36,13 @@ public class CalculatorFrame extends JFrame implements WindowListener {
             buttons.get(i).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String prevText = textField.getText();
-                    textField.setText(prevText + String.valueOf(finalI));
+                    if (!resultFlag) {
+                        String prevText = textField.getText();
+                        textField.setText(prevText + String.valueOf(finalI));
+                    } else {
+                        textField.setText(String.valueOf(finalI));
+                        resultFlag = false;
+                    }
                 }
             });
             if (i > 0)
@@ -59,12 +68,13 @@ public class CalculatorFrame extends JFrame implements WindowListener {
             public void actionPerformed(ActionEvent e) {
                 CalcStrategy temp = new CalcStrategy(textField.getText());
                 textField.setText(String.valueOf(temp.getC()));
+                resultFlag = true;
             }
         });
         numberPnl.add(eqlBtn);
         add(numberPnl, BorderLayout.CENTER);
 
-        JPanel operationPnl = new JPanel(new GridLayout(4,1));
+        JPanel operationPnl = new JPanel(new GridLayout(4,2));
         JButton addBtn = new JButton("+");
         addBtn.setPreferredSize(new Dimension(90, 75));
         addBtn.addActionListener(new ActionListener() {
@@ -101,14 +111,28 @@ public class CalculatorFrame extends JFrame implements WindowListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String prevText = textField.getText();
-                if (!calcStrategy.check(prevText) && !prevText.isEmpty())
+                if ((!calcStrategy.check(prevText) && !prevText.isEmpty()) || exponentFlag) {
                     textField.setText(prevText + "/");
+                    exponentFlag = false;
+                }
+            }
+        });
+        JButton expBtn = new JButton("^");
+        expBtn.setPreferredSize(new Dimension(90, 75));
+        expBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String prevText = textField.getText();
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty())
+                    textField.setText(prevText + "^");
+                exponentFlag = true;
             }
         });
         operationPnl.add(addBtn);
         operationPnl.add(subBtn);
         operationPnl.add(mulBtn);
         operationPnl.add(divBtn);
+        operationPnl.add(expBtn);
         add(operationPnl, BorderLayout.WEST);
 
         setVisible(true);

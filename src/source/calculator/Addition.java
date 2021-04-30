@@ -1,4 +1,4 @@
-package calculator;
+package source.calculator;
 
 public class Addition extends CalcStrategy{
     public Addition(double a, double b, char AorS) {

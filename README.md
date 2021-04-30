@@ -1,2 +1,2 @@
-# calculator
-A scientific calculator, designed for entertainment
+# source.calculator
+A scientific source.calculator, designed for entertainment

@@ -1,12 +1,10 @@
-package calculator;
-
-import java.util.Vector;
+package source.calculator;
 
 public class CalcStrategy {
     private final String[] OPERATORS;
 
     {
-        OPERATORS = new String[]{"[+]", "[-]", "[*]", "[/]"};
+        OPERATORS = new String[]{"[+]", "[-]", "[*]", "[/]", "[^]"};
     }
 
     protected double c;
@@ -14,7 +12,7 @@ public class CalcStrategy {
     public CalcStrategy() {}
 
     // Can only handle two operands and one operator right now
-    public CalcStrategy(String input){
+    public CalcStrategy(String input) throws ArithmeticException{
         String temp = input;
         while (check(temp)){
             int i = 0;
