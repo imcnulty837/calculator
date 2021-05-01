@@ -5,6 +5,8 @@ Implemented Features:
   Subtraction
   Multiplication
   Division
-Planned Features:
-  Square Root
+  Nth Root
   Nth Power
+Planned Features:
+  Square root
+  Squared
