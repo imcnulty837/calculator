@@ -8,5 +8,5 @@ Implemented Features:
   Nth Root
   Nth Power
 Planned Features:
-  Square Root
+  Square root
   Squared
