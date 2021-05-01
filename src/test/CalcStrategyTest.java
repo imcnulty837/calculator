@@ -1,8 +1,3 @@
-/**TODO:
- *  1. Perform successful test of Exception thrown from multiplication
- *  2. Testing for Powers strategy and class
- */
-
 package test;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import source.calculator.Addition;
 import source.calculator.CalcStrategy;
 import source.calculator.Multiplication;
+import source.calculator.Powers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,6 +30,10 @@ public class CalcStrategyTest {
         assertEquals(1.0, calcStrategy.getC(), "Multiplication Strategy testing");
         calcStrategy = new CalcStrategy("1/1");
         assertEquals(1.0, calcStrategy.getC(), "Division Strategy testing");
+        calcStrategy = new CalcStrategy("4^2");
+        assertEquals(16.0, calcStrategy.getC(), "Exponent Strategy testing");
+        calcStrategy = new CalcStrategy("4^1/2");
+        assertEquals(2.0, calcStrategy.getC(), "Root Strategy Testing");
     }
 
     @Test
@@ -74,9 +74,27 @@ public class CalcStrategyTest {
         assertEquals(2.0, calcStrategy.getC(), "Regular Division");
         calcStrategy = new Multiplication(2, 2, 'd');
         assertEquals(1.0, calcStrategy.getC(), "Division identity testing");
-        //calcStrategy = new Multiplication(1, 0, 'd');
-        //assertEquals(0.0, calcStrategy.getC(), "Error testing, sets C value in superclass to 0.0 if 0 is input and" +
-        //        " throws an ArithmeticException");
-        //assertThrows(ArithmeticException.class, () -> {calcStrategy = new Multiplication(1, 0, 'd');});
+        calcStrategy = new Multiplication(1, 0, 'd');
+        assertEquals(Double.POSITIVE_INFINITY, calcStrategy.getC(), "Error testing, sets C value in superclass to " +
+                "Infinity if positive N and 0 are inputs");
+        calcStrategy = new Multiplication(0, 0, 'd');
+        assertEquals(Double.NaN, calcStrategy.getC(), "Error testing, sets C value in superclass to NaN if 0 is input " +
+                "in both operands");
+        calcStrategy = new Multiplication(-1, 0, 'd');
+        assertEquals(Double.NEGATIVE_INFINITY, calcStrategy.getC(), "Error testing, sets C value in superclass to " +
+                "Negative Infinity if negative N and 0 are inputs");
+    }
+
+    @Test
+    @DisplayName("Powers testing")
+    public void testPower() {
+        calcStrategy = new Powers(4, "2");
+        assertEquals(16.0, calcStrategy.getC(), "4 squared is 16");
+        calcStrategy = new Powers(4, "1/2");
+        assertEquals(2.0, calcStrategy.getC(), "sqrt(4) is 2");
+        calcStrategy = new Powers(4, "0");
+        assertEquals(1.0, calcStrategy.getC(), "N to the 0th power is 1");
+        calcStrategy = new Powers(4, "1");
+        assertEquals(4.0, calcStrategy.getC(), "N to the 1th power is N");
     }
 }
