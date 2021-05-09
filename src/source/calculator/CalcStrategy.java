@@ -4,7 +4,7 @@ public class CalcStrategy {
     private final String[] OPERATORS;
 
     {
-        OPERATORS = new String[]{"[}^]", "[+]", "[-]", "[*]", "[/]"};
+        OPERATORS = new String[]{"[()]", "[}^]", "[*]", "[/]", "[+]", "[-]"};
     }
 
     protected double c;
@@ -14,7 +14,7 @@ public class CalcStrategy {
     // Can only handle two operands and one operator right now
     public CalcStrategy(String input){
         String temp = input;
-        boolean powerFlag = false;
+        boolean opFlag = false;
         while (check(temp)){
             int i = 0;
             for (String s: OPERATORS){
@@ -27,24 +27,36 @@ public class CalcStrategy {
                     String[] tempArr = temp.split(OPERATORS[i]);
                     CalcStrategy object;
                     switch (i){
-                        case 1 -> object = new Addition(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 'a');
-                        case 2 -> object = new Addition(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 's');
-                        case 3 -> object = new Multiplication(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 'm');
-                        case 4 -> object = new Multiplication(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 'd');
-                        case 0 -> {
+                        case 2 -> {
+                            object = new Multiplication(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 'm');
+                            opFlag = true;
+                        }
+                        case 3 -> {
+                            object = new Multiplication(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 'd');
+                            opFlag = true;
+                        }
+                        case 4 -> {
+                            object = new Addition(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 'a');
+                            opFlag = true;
+                        }
+                        case 5 -> {
+                            object = new Addition(Double.parseDouble(tempArr[0]), Double.parseDouble(tempArr[1]), 's');
+                            opFlag = true;
+                        }
+                        case 1 -> {
                             object = new Powers(Double.parseDouble(tempArr[0]), tempArr[1]);
-                            powerFlag = true;
+                            opFlag = true;
                         }
                         default -> throw new IllegalStateException("Unexpected value: " + i);
                     }
                     setC(object.getC());
                     temp = tempArr[1];
                 }
-                if (powerFlag)
+                if (opFlag)
                     break;
                 i = i + 1;
             }
-            if (powerFlag)
+            if (opFlag)
                 break;
         }
     }

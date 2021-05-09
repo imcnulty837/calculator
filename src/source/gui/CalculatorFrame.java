@@ -128,12 +128,42 @@ public class CalculatorFrame extends JFrame implements WindowListener {
                 }
             }
         });
+        // ^2 button for squaring input
+        JButton sqrBtn = new JButton("^2");
+        sqrBtn.setPreferredSize(new Dimension(90, 75));
+        sqrBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String prevText = textField.getText();
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty()) {
+                    CalcStrategy temp = new CalcStrategy(textField.getText()+"^2");
+                    textField.setText(String.valueOf(temp.getC()));
+                    resultFlag = true;
+                }
+            }
+        });
+        // sqrt button for square root of input
+        JButton sqrtBtn = new JButton("sqrt");
+        sqrtBtn.setPreferredSize(new Dimension(90, 75));
+        sqrtBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String prevText = textField.getText();
+                if (!calcStrategy.check(prevText) && !prevText.isEmpty()) {
+                    CalcStrategy temp = new CalcStrategy(textField.getText()+"^1/2");
+                    textField.setText(String.valueOf(temp.getC()));
+                    resultFlag = true;
+                }
+            }
+        });
         operationPnl.add(addBtn);
         operationPnl.add(subBtn);
         operationPnl.add(mulBtn);
         operationPnl.add(divBtn);
         operationPnl.add(expBtn);
-        add(operationPnl, BorderLayout.WEST);
+        operationPnl.add(sqrBtn);
+        operationPnl.add(sqrtBtn);
+        add(operationPnl, BorderLayout.EAST);
 
         setVisible(true);
         setSize(new Dimension(300, 500));
